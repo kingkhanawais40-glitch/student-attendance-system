@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios.js";
+import "./Login.css";
 
 export default function Login() {
     const navigate = useNavigate();
@@ -25,26 +26,22 @@ export default function Login() {
                 }
             );
 
-            // Make sure backend returned token
             if (!data.token) {
                 throw new Error(
                     "Login token was not received."
                 );
             }
 
-            // Save JWT token
             localStorage.setItem(
                 "token",
                 data.token
             );
 
-            // Save user information
             localStorage.setItem(
                 "user",
                 JSON.stringify(data.user)
             );
 
-            // Go to dashboard
             navigate("/dashboard");
         } catch (err) {
             console.error(
@@ -63,166 +60,178 @@ export default function Login() {
     }
 
     return (
-        <div
-            style={{
-                minHeight: "100vh",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                background: "#f1f5f9",
-                padding: "20px",
-                boxSizing: "border-box",
-            }}
-        >
-            <div
-                style={{
-                    width: "400px",
-                    maxWidth: "100%",
-                    background: "white",
-                    padding: "35px",
-                    borderRadius: "15px",
-                    boxShadow:
-                        "0 10px 30px rgba(0,0,0,0.1)",
-                    boxSizing: "border-box",
-                }}
-            >
-                <h1
-                    style={{
-                        marginBottom: "8px",
-                        color: "#0f172a",
-                    }}
-                >
-                    Student Attendance System
-                </h1>
+        <div className="login-page">
 
-                <p
-                    style={{
-                        color: "#64748b",
-                        marginBottom: "25px",
-                    }}
-                >
-                    Login to your account
-                </p>
+            {/* Background decoration */}
+            <div className="login-orb login-orb-one"></div>
+            <div className="login-orb login-orb-two"></div>
+            <div className="login-orb login-orb-three"></div>
 
-                {/* Error Message */}
+            {/* Floating grid */}
+            <div className="login-grid"></div>
+
+            {/* Login Card */}
+            <div className="login-card">
+
+                {/* Brand */}
+                <div className="login-brand">
+
+                    <div className="login-logo">
+                        A
+                    </div>
+
+                    <div>
+                        <h1>
+                            Attendance
+                        </h1>
+
+                        <p>
+                            Student Management
+                        </p>
+                    </div>
+
+                </div>
+
+                {/* Heading */}
+                <div className="login-heading">
+                    <h2>
+                        Welcome Back
+                    </h2>
+
+                    <p>
+                        Login to your account
+                    </p>
+                </div>
+
+                {/* Error */}
                 {error && (
-                    <div
-                        style={{
-                            background: "#fee2e2",
-                            color: "#b91c1c",
-                            padding: "10px",
-                            borderRadius: "8px",
-                            marginBottom: "15px",
-                            fontSize: "14px",
-                        }}
-                    >
-                        {error}
+                    <div className="login-error">
+                        <span className="error-icon">
+                            !
+                        </span>
+
+                        <span>
+                            {error}
+                        </span>
                     </div>
                 )}
 
-                <form onSubmit={handleSubmit}>
-                    {/* Email */}
-                    <label
-                        style={{
-                            display: "block",
-                            color: "#334155",
-                            fontWeight: "600",
-                        }}
-                    >
-                        Email
-                    </label>
+                {/* Form */}
+                <form
+                    className="login-form"
+                    onSubmit={handleSubmit}
+                >
 
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={(e) =>
-                            setEmail(e.target.value)
-                        }
-                        placeholder="admin@attendance.com"
-                        autoComplete="email"
-                        required
-                        style={{
-                            width: "100%",
-                            padding: "12px",
-                            marginTop: "6px",
-                            marginBottom: "18px",
-                            border: "1px solid #cbd5e1",
-                            borderRadius: "8px",
-                            boxSizing: "border-box",
-                            outline: "none",
-                        }}
-                    />
+                    {/* Email */}
+                    <div className="login-field">
+
+                        <label htmlFor="email">
+                            Email Address
+                        </label>
+
+                        <div className="input-wrapper">
+
+                            <span className="input-icon">
+                                @
+                            </span>
+
+                            <input
+                                id="email"
+                                type="email"
+                                value={email}
+                                onChange={(e) =>
+                                    setEmail(
+                                        e.target.value
+                                    )
+                                }
+                                placeholder="admin@attendance.com"
+                                autoComplete="email"
+                                required
+                            />
+
+                        </div>
+
+                    </div>
 
                     {/* Password */}
-                    <label
-                        style={{
-                            display: "block",
-                            color: "#334155",
-                            fontWeight: "600",
-                        }}
-                    >
-                        Password
-                    </label>
+                    <div className="login-field">
 
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(e) =>
-                            setPassword(e.target.value)
-                        }
-                        placeholder="Enter password"
-                        autoComplete="current-password"
-                        required
-                        style={{
-                            width: "100%",
-                            padding: "12px",
-                            marginTop: "6px",
-                            marginBottom: "20px",
-                            border: "1px solid #cbd5e1",
-                            borderRadius: "8px",
-                            boxSizing: "border-box",
-                            outline: "none",
-                        }}
-                    />
+                        <label htmlFor="password">
+                            Password
+                        </label>
 
-                    {/* Login Button */}
+                        <div className="input-wrapper">
+
+                            <span className="input-icon">
+                                •••
+                            </span>
+
+                            <input
+                                id="password"
+                                type="password"
+                                value={password}
+                                onChange={(e) =>
+                                    setPassword(
+                                        e.target.value
+                                    )
+                                }
+                                placeholder="Enter your password"
+                                autoComplete="current-password"
+                                required
+                            />
+
+                        </div>
+
+                    </div>
+
+                    {/* Login */}
                     <button
                         type="submit"
+                        className="login-button"
                         disabled={loading}
-                        style={{
-                            width: "100%",
-                            padding: "12px",
-                            background: loading
-                                ? "#93c5fd"
-                                : "#2563eb",
-                            color: "white",
-                            border: "none",
-                            borderRadius: "8px",
-                            cursor: loading
-                                ? "not-allowed"
-                                : "pointer",
-                            fontSize: "16px",
-                            fontWeight: "600",
-                        }}
                     >
-                        {loading
-                            ? "Logging in..."
-                            : "Login"}
+                        <span>
+                            {loading
+                                ? "Logging in..."
+                                : "Login to Dashboard"}
+                        </span>
+
+                        {!loading && (
+                            <span className="login-arrow">
+                                →
+                            </span>
+                        )}
                     </button>
+
                 </form>
 
-                <p
-                    style={{
-                        marginTop: "20px",
-                        fontSize: "13px",
-                        color: "#64748b",
-                    }}
-                >
-                    Demo Admin:
-                    <br />
-                    admin@attendance.com
-                </p>
+                {/* Demo information */}
+                <div className="demo-box">
+
+                    <div className="demo-icon">
+                        i
+                    </div>
+
+                    <div className="demo-content">
+
+                        <strong>
+                            Demo Admin Account
+                        </strong>
+
+                        <span>
+                            admin@attendance.com
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div className="login-footer">
+                    Student Attendance Management System
+                </div>
+
             </div>
         </div>
     );
 }
+

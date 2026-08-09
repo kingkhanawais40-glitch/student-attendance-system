@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import api from "../api/axios.js";
+import "./Users.css";
 
 export default function Users() {
     const [users, setUsers] = useState([]);
@@ -26,15 +27,11 @@ export default function Users() {
             setLoading(true);
             setError("");
 
-            const { data } =
-                await api.get("/users");
+            const { data } = await api.get("/users");
 
             setUsers(data.users || []);
         } catch (err) {
-            console.error(
-                "LOAD USERS ERROR:",
-                err
-            );
+            console.error("LOAD USERS ERROR:", err);
 
             setError(
                 err.response?.data?.message ||
@@ -54,17 +51,15 @@ export default function Users() {
         try {
             setSaving(true);
 
-            const { data } =
-                await api.post("/users", {
-                    name,
-                    email,
-                    password,
-                    role,
-                });
+            const { data } = await api.post("/users", {
+                name,
+                email,
+                password,
+                role,
+            });
 
             setMessage(
-                data.message ||
-                    "User created successfully."
+                data.message || "User created successfully."
             );
 
             setName("");
@@ -76,10 +71,7 @@ export default function Users() {
 
             await loadUsers();
         } catch (err) {
-            console.error(
-                "CREATE USER ERROR:",
-                err
-            );
+            console.error("CREATE USER ERROR:", err);
 
             setError(
                 err.response?.data?.message ||
@@ -103,22 +95,15 @@ export default function Users() {
             setError("");
             setMessage("");
 
-            const { data } =
-                await api.delete(
-                    `/users/${id}`
-                );
+            const { data } = await api.delete(`/users/${id}`);
 
             setMessage(
-                data.message ||
-                    "User deleted successfully."
+                data.message || "User deleted successfully."
             );
 
             await loadUsers();
         } catch (err) {
-            console.error(
-                "DELETE USER ERROR:",
-                err
-            );
+            console.error("DELETE USER ERROR:", err);
 
             setError(
                 err.response?.data?.message ||
@@ -128,540 +113,373 @@ export default function Users() {
     }
 
     return (
-        <div
-            style={{
-                padding: "30px",
-            }}
-        >
-            {/* Header */}
+        <div className="users-page">
 
-            <div
-                style={{
-                    display: "flex",
-                    justifyContent:
-                        "space-between",
-                    alignItems: "center",
-                    marginBottom: "25px",
-                    gap: "20px",
-                }}
-            >
+            {/* Background decoration */}
+            <div className="users-bg-orb users-bg-orb-one"></div>
+            <div className="users-bg-orb users-bg-orb-two"></div>
+
+            {/* HEADER */}
+            <div className="users-header">
+
                 <div>
-                    <h1>
-                        Users / Staff
-                    </h1>
+                    <h1>Users / Staff</h1>
 
-                    <p
-                        style={{
-                            color: "#64748b",
-                        }}
-                    >
-                        Manage system users and
-                        staff accounts
+                    <p>
+                        Manage system users and staff accounts
                     </p>
                 </div>
 
                 <button
-                    onClick={() =>
-                        setShowForm(
-                            !showForm
-                        )
-                    }
-                    style={{
-                        padding:
-                            "12px 18px",
-                        border: "none",
-                        borderRadius:
-                            "8px",
-                        background:
-                            "#2563eb",
-                        color: "white",
-                        cursor: "pointer",
-                        fontWeight:
-                            "600",
-                    }}
+                    type="button"
+                    className="users-add-button"
+                    onClick={() => setShowForm(!showForm)}
                 >
-                    {showForm
-                        ? "Cancel"
-                        : "+ Add User"}
+                    {showForm ? "Close Form" : "+ Add User"}
                 </button>
+
             </div>
 
-            {/* Messages */}
+            {/* MESSAGES */}
 
             {message && (
-                <div
-                    style={{
-                        marginBottom: "15px",
-                        padding: "12px",
-                        background:
-                            "#dcfce7",
-                        color: "#166534",
-                        borderRadius:
-                            "8px",
-                    }}
-                >
+                <div className="users-message users-success">
+                    <span className="message-icon">✓</span>
                     {message}
                 </div>
             )}
 
             {error && (
-                <div
-                    style={{
-                        marginBottom: "15px",
-                        padding: "12px",
-                        background:
-                            "#fee2e2",
-                        color: "#b91c1c",
-                        borderRadius:
-                            "8px",
-                    }}
-                >
+                <div className="users-message users-error">
+                    <span className="message-icon">!</span>
                     {error}
                 </div>
             )}
 
-            {/* Add User Form */}
+            {/* ADD USER FORM */}
 
             {showForm && (
-                <div
-                    style={{
-                        background: "white",
-                        padding: "25px",
-                        borderRadius:
-                            "12px",
-                        boxShadow:
-                            "0 4px 15px rgba(0,0,0,0.08)",
-                        marginBottom:
-                            "25px",
-                        maxWidth: "650px",
-                    }}
-                >
-                    <h2>
-                        Add New User
-                    </h2>
+                <div className="users-form-card">
 
-                    <form
-                        onSubmit={
-                            handleCreateUser
-                        }
-                        style={{
-                            marginTop:
-                                "20px",
-                        }}
-                    >
-                        <label>
-                            Name
-                        </label>
+                    <div className="users-form-header">
 
-                        <input
-                            type="text"
-                            value={name}
-                            onChange={(e) =>
-                                setName(
-                                    e.target
-                                        .value
-                                )
-                            }
-                            required
-                            style={{
-                                width: "100%",
-                                padding:
-                                    "12px",
-                                marginTop:
-                                    "6px",
-                                marginBottom:
-                                    "15px",
-                                boxSizing:
-                                    "border-box",
-                                border:
-                                    "1px solid #cbd5e1",
-                                borderRadius:
-                                    "8px",
-                            }}
-                        />
+                        <div className="users-form-icon">
+                            +
+                        </div>
 
-                        <label>
-                            Email
-                        </label>
+                        <div>
+                            <h2>Add New User</h2>
 
-                        <input
-                            type="email"
-                            value={email}
-                            onChange={(e) =>
-                                setEmail(
-                                    e.target
-                                        .value
-                                )
-                            }
-                            required
-                            style={{
-                                width: "100%",
-                                padding:
-                                    "12px",
-                                marginTop:
-                                    "6px",
-                                marginBottom:
-                                    "15px",
-                                boxSizing:
-                                    "border-box",
-                                border:
-                                    "1px solid #cbd5e1",
-                                borderRadius:
-                                    "8px",
-                            }}
-                        />
+                            <p>
+                                Create a new system or staff account.
+                            </p>
+                        </div>
 
-                        <label>
-                            Password
-                        </label>
+                    </div>
 
-                        <input
-                            type="password"
-                            value={password}
-                            onChange={(e) =>
-                                setPassword(
-                                    e.target
-                                        .value
-                                )
-                            }
-                            required
-                            minLength={6}
-                            style={{
-                                width: "100%",
-                                padding:
-                                    "12px",
-                                marginTop:
-                                    "6px",
-                                marginBottom:
-                                    "15px",
-                                boxSizing:
-                                    "border-box",
-                                border:
-                                    "1px solid #cbd5e1",
-                                borderRadius:
-                                    "8px",
-                            }}
-                        />
+                    <form onSubmit={handleCreateUser}>
 
-                        <label>
-                            Role
-                        </label>
+                        <div className="users-form-grid">
 
-                        <select
-                            value={role}
-                            onChange={(e) =>
-                                setRole(
-                                    e.target
-                                        .value
-                                )
-                            }
-                            style={{
-                                width: "100%",
-                                padding:
-                                    "12px",
-                                marginTop:
-                                    "6px",
-                                marginBottom:
-                                    "20px",
-                                boxSizing:
-                                    "border-box",
-                                border:
-                                    "1px solid #cbd5e1",
-                                borderRadius:
-                                    "8px",
-                            }}
-                        >
-                            <option value="teacher">
-                                Teacher
-                            </option>
+                            {/* NAME */}
 
-                            <option value="admin">
-                                Admin
-                            </option>
+                            <div className="users-form-group">
+                                <label htmlFor="user-name">
+                                    Full Name
+                                </label>
 
-                            <option value="student">
-                                Student
-                            </option>
-                        </select>
+                                <input
+                                    id="user-name"
+                                    type="text"
+                                    value={name}
+                                    onChange={(e) =>
+                                        setName(e.target.value)
+                                    }
+                                    placeholder="Enter full name"
+                                    required
+                                />
+                            </div>
 
-                        <button
-                            type="submit"
-                            disabled={saving}
-                            style={{
-                                padding:
-                                    "12px 20px",
-                                border: "none",
-                                borderRadius:
-                                    "8px",
-                                background:
-                                    "#2563eb",
-                                color:
-                                    "white",
-                                cursor:
-                                    saving
-                                        ? "not-allowed"
-                                        : "pointer",
-                                fontWeight:
-                                    "600",
-                            }}
-                        >
-                            {saving
-                                ? "Creating..."
-                                : "Create User"}
-                        </button>
+                            {/* EMAIL */}
+
+                            <div className="users-form-group">
+                                <label htmlFor="user-email">
+                                    Email
+                                </label>
+
+                                <input
+                                    id="user-email"
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) =>
+                                        setEmail(e.target.value)
+                                    }
+                                    placeholder="user@example.com"
+                                    required
+                                />
+                            </div>
+
+                            {/* PASSWORD */}
+
+                            <div className="users-form-group">
+                                <label htmlFor="user-password">
+                                    Password
+                                </label>
+
+                                <input
+                                    id="user-password"
+                                    type="password"
+                                    value={password}
+                                    onChange={(e) =>
+                                        setPassword(e.target.value)
+                                    }
+                                    placeholder="Minimum 6 characters"
+                                    minLength={6}
+                                    required
+                                />
+                            </div>
+
+                            {/* ROLE */}
+
+                            <div className="users-form-group">
+                                <label htmlFor="user-role">
+                                    Role
+                                </label>
+
+                                <select
+                                    id="user-role"
+                                    value={role}
+                                    onChange={(e) =>
+                                        setRole(e.target.value)
+                                    }
+                                >
+                                    <option value="teacher">
+                                        Teacher
+                                    </option>
+
+                                    <option value="admin">
+                                        Admin
+                                    </option>
+
+                                    <option value="student">
+                                        Student
+                                    </option>
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <div className="users-form-actions">
+
+                            <button
+                                type="submit"
+                                className="users-create-button"
+                                disabled={saving}
+                            >
+                                {saving
+                                    ? "Creating..."
+                                    : "Create User"}
+                            </button>
+
+                            <button
+                                type="button"
+                                className="users-cancel-button"
+                                onClick={() => setShowForm(false)}
+                                disabled={saving}
+                            >
+                                Cancel
+                            </button>
+
+                        </div>
+
                     </form>
+
                 </div>
             )}
 
-            {/* Users Table */}
+            {/* USERS CARD */}
 
-            <div
-                style={{
-                    background: "white",
-                    borderRadius:
-                        "12px",
-                    boxShadow:
-                        "0 4px 15px rgba(0,0,0,0.08)",
-                    overflow: "hidden",
-                }}
-            >
-                <div
-                    style={{
-                        padding: "20px",
-                        borderBottom:
-                            "1px solid #e2e8f0",
-                    }}
-                >
-                    <h2>
-                        System Users
-                    </h2>
+            <div className="users-card">
 
-                    <p
-                        style={{
-                            color: "#64748b",
-                            marginTop:
-                                "5px",
-                        }}
-                    >
-                        {users.length} users
-                    </p>
+                <div className="users-card-header">
+
+                    <div className="users-card-title">
+
+                        <div className="users-title-icon">
+                            👥
+                        </div>
+
+                        <div>
+                            <h2>System Users</h2>
+
+                            <p>
+                                {users.length} registered user
+                                {users.length !== 1 ? "s" : ""}
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div className="users-count-badge">
+                        {users.length} Users
+                    </div>
+
                 </div>
 
+                {/* LOADING */}
+
                 {loading ? (
-                    <div
-                        style={{
-                            padding: "40px",
-                            textAlign:
-                                "center",
-                        }}
-                    >
-                        Loading users...
+                    <div className="users-empty">
+                        <div className="users-loading-icon">
+                            ⟳
+                        </div>
+
+                        <h3>Loading users...</h3>
+
+                        <p>
+                            Please wait while user records are loaded.
+                        </p>
                     </div>
-                ) : users.length ===
-                  0 ? (
-                    <div
-                        style={{
-                            padding: "40px",
-                            textAlign:
-                                "center",
-                        }}
-                    >
-                        No users found.
-                    </div>
-                ) : (
-                    <div
-                        style={{
-                            overflowX:
-                                "auto",
-                        }}
-                    >
-                        <table
-                            style={{
-                                width:
-                                    "100%",
-                                borderCollapse:
-                                    "collapse",
-                            }}
+
+                ) : users.length === 0 ? (
+
+                    /* EMPTY */
+
+                    <div className="users-empty">
+
+                        <div className="users-empty-icon">
+                            👤
+                        </div>
+
+                        <h3>No users found</h3>
+
+                        <p>
+                            Create your first system user to get started.
+                        </p>
+
+                        <button
+                            type="button"
+                            className="users-empty-button"
+                            onClick={() => setShowForm(true)}
                         >
+                            + Add User
+                        </button>
+
+                    </div>
+
+                ) : (
+
+                    /* TABLE */
+
+                    <div className="users-table-wrapper">
+
+                        <table className="users-table">
+
                             <thead>
-                                <tr
-                                    style={{
-                                        background:
-                                            "#f8fafc",
-                                    }}
-                                >
-                                    <th
-                                        style={{
-                                            padding:
-                                                "14px",
-                                            textAlign:
-                                                "left",
-                                        }}
-                                    >
-                                        ID
-                                    </th>
-
-                                    <th
-                                        style={{
-                                            padding:
-                                                "14px",
-                                            textAlign:
-                                                "left",
-                                        }}
-                                    >
-                                        Name
-                                    </th>
-
-                                    <th
-                                        style={{
-                                            padding:
-                                                "14px",
-                                            textAlign:
-                                                "left",
-                                        }}
-                                    >
-                                        Email
-                                    </th>
-
-                                    <th
-                                        style={{
-                                            padding:
-                                                "14px",
-                                            textAlign:
-                                                "left",
-                                        }}
-                                    >
-                                        Role
-                                    </th>
-
-                                    <th
-                                        style={{
-                                            padding:
-                                                "14px",
-                                            textAlign:
-                                                "left",
-                                        }}
-                                    >
-                                        Action
-                                    </th>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>User</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                                {users.map(
-                                    (user) => (
-                                        <tr
-                                            key={
-                                                user.id
-                                            }
-                                            style={{
-                                                borderTop:
-                                                    "1px solid #e2e8f0",
-                                            }}
-                                        >
-                                            <td
-                                                style={{
-                                                    padding:
-                                                        "14px",
-                                                }}
-                                            >
-                                                {
-                                                    user.id
-                                                }
-                                            </td>
 
-                                            <td
-                                                style={{
-                                                    padding:
-                                                        "14px",
-                                                }}
-                                            >
-                                                <strong>
-                                                    {
-                                                        user.name
-                                                    }
-                                                </strong>
-                                            </td>
+                                {users.map((user) => {
 
-                                            <td
-                                                style={{
-                                                    padding:
-                                                        "14px",
-                                                }}
-                                            >
-                                                {
-                                                    user.email
-                                                }
-                                            </td>
+                                    const initials = (
+                                        user.name || "User"
+                                    )
+                                        .split(" ")
+                                        .map((word) =>
+                                            word.charAt(0)
+                                        )
+                                        .join("")
+                                        .slice(0, 2)
+                                        .toUpperCase();
 
-                                            <td
-                                                style={{
-                                                    padding:
-                                                        "14px",
-                                                }}
-                                            >
-                                                <span
-                                                    style={{
-                                                        padding:
-                                                            "5px 10px",
-                                                        borderRadius:
-                                                            "20px",
-                                                        background:
-                                                            "#eff6ff",
-                                                        color:
-                                                            "#1d4ed8",
-                                                        fontSize:
-                                                            "13px",
-                                                        fontWeight:
-                                                            "600",
-                                                    }}
-                                                >
-                                                    {
-                                                        user.role
-                                                    }
+                                    return (
+                                        <tr key={user.id}>
+
+                                            <td>
+                                                <span className="user-id-badge">
+                                                    #{user.id}
                                                 </span>
                                             </td>
 
-                                            <td
-                                                style={{
-                                                    padding:
-                                                        "14px",
-                                                }}
-                                            >
+                                            <td>
+
+                                                <div className="user-profile">
+
+                                                    <div className="user-avatar">
+                                                        {initials}
+                                                    </div>
+
+                                                    <div>
+                                                        <strong>
+                                                            {user.name}
+                                                        </strong>
+
+                                                        <small>
+                                                            System Account
+                                                        </small>
+                                                    </div>
+
+                                                </div>
+
+                                            </td>
+
+                                            <td>
+
+                                                <div className="user-email">
+                                                    {user.email}
+                                                </div>
+
+                                            </td>
+
+                                            <td>
+
+                                                <span
+                                                    className={`user-role-badge role-${user.role}`}
+                                                >
+                                                    <span className="role-dot"></span>
+
+                                                    {user.role}
+                                                </span>
+
+                                            </td>
+
+                                            <td>
+
                                                 <button
+                                                    type="button"
+                                                    className="users-delete-button"
                                                     onClick={() =>
                                                         handleDeleteUser(
                                                             user.id
                                                         )
                                                     }
-                                                    style={{
-                                                        padding:
-                                                            "7px 12px",
-                                                        border:
-                                                            "none",
-                                                        borderRadius:
-                                                            "6px",
-                                                        background:
-                                                            "#fee2e2",
-                                                        color:
-                                                            "#b91c1c",
-                                                        cursor:
-                                                            "pointer",
-                                                        fontWeight:
-                                                            "600",
-                                                    }}
                                                 >
                                                     Delete
                                                 </button>
+
                                             </td>
+
                                         </tr>
-                                    )
-                                )}
+                                    );
+                                })}
+
                             </tbody>
+
                         </table>
+
                     </div>
                 )}
+
             </div>
+
         </div>
     );
 }

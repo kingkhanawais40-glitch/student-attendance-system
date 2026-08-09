@@ -57,9 +57,7 @@ export default function Settings() {
         setError("");
 
         if (!name.trim() || !email.trim()) {
-            setError(
-                "Name and email are required."
-            );
+            setError("Name and email are required.");
             return;
         }
 
@@ -86,7 +84,6 @@ export default function Settings() {
             );
 
             setEditing(false);
-
         } catch (err) {
             console.error(
                 "UPDATE PROFILE ERROR:",
@@ -158,7 +155,6 @@ export default function Settings() {
             setCurrentPassword("");
             setNewPassword("");
             setConfirmPassword("");
-
         } catch (err) {
             console.error(
                 "CHANGE PASSWORD ERROR:",
@@ -174,424 +170,366 @@ export default function Settings() {
         }
     }
 
+    // =========================
+    // GET USER INITIALS
+    // =========================
+
+    const initials = (storedUser?.name || "User")
+        .split(" ")
+        .map((word) => word.charAt(0))
+        .join("")
+        .slice(0, 2)
+        .toUpperCase();
+
     return (
-        <div style={{ padding: "30px" }}>
-
-            <h1>Settings</h1>
-
-            <p>
-                Manage your account and system settings.
-            </p>
+        <div className="settings-page">
 
             {/* =========================
-                ACCOUNT INFORMATION
+                HEADER
             ========================= */}
 
-            <div
-                style={{
-                    marginTop: "25px",
-                    padding: "25px",
-                    background: "#fff",
-                    borderRadius: "12px",
-                    boxShadow:
-                        "0 4px 15px rgba(0,0,0,0.08)",
-                    maxWidth: "600px",
-                }}
-            >
+            <div className="settings-header">
+                <h1>Settings</h1>
 
-                <div
-                    style={{
-                        display: "flex",
-                        justifyContent:
-                            "space-between",
-                        alignItems: "center",
-                        gap: "15px",
-                    }}
-                >
-                    <h2>
-                        Account Information
-                    </h2>
+                <p>
+                    Manage your account and system settings.
+                </p>
+            </div>
 
-                    {!editing && (
-                        <button
-                            type="button"
-                            onClick={() =>
-                                setEditing(true)
-                            }
-                            style={{
-                                padding:
-                                    "9px 16px",
-                                border: "none",
-                                borderRadius:
-                                    "8px",
-                                background:
-                                    "#2563eb",
-                                color: "white",
-                                cursor: "pointer",
-                                fontWeight:
-                                    "600",
-                            }}
-                        >
-                            Edit Profile
-                        </button>
-                    )}
-                </div>
+            <div className="settings-container">
 
-                {/* PROFILE VIEW */}
+                {/* =========================
+                    ACCOUNT INFORMATION
+                ========================= */}
 
-                {!editing ? (
-                    <div
-                        style={{
-                            marginTop: "20px",
-                        }}
-                    >
+                <div className="settings-card">
 
-                        <p>
+                    <div className="settings-card-header">
+                        <div>
+                            <h2>
+                                Account Information
+                            </h2>
+
+                            <p>
+                                Update your personal account details.
+                            </p>
+                        </div>
+
+                        {!editing && (
+                            <button
+                                type="button"
+                                className="settings-edit-button"
+                                onClick={() => {
+                                    setEditing(true);
+                                    setMessage("");
+                                    setError("");
+                                }}
+                            >
+                                Edit Profile
+                            </button>
+                        )}
+                    </div>
+
+                    {/* =========================
+                        PROFILE SUMMARY
+                    ========================= */}
+
+                    <div className="settings-profile">
+
+                        <div className="settings-avatar">
+                            {initials}
+                        </div>
+
+                        <div className="settings-user-info">
+
                             <strong>
-                                Name:
-                            </strong>{" "}
-                            {storedUser?.name ||
-                                "-"}
-                        </p>
+                                {storedUser?.name || "User"}
+                            </strong>
 
-                        <p>
-                            <strong>
-                                Email:
-                            </strong>{" "}
-                            {storedUser?.email ||
-                                "-"}
-                        </p>
+                            <span>
+                                {storedUser?.email || "-"}
+                            </span>
 
-                        <p>
-                            <strong>
-                                Role:
-                            </strong>{" "}
-                            {storedUser?.role ||
-                                "-"}
-                        </p>
+                        </div>
 
                     </div>
-                ) : (
 
-                    /* PROFILE EDIT FORM */
+                    {/* =========================
+                        PROFILE VIEW
+                    ========================= */}
+
+                    {!editing ? (
+                        <div className="settings-form">
+
+                            <div className="settings-form-group">
+                                <label>Name</label>
+
+                                <input
+                                    type="text"
+                                    value={
+                                        storedUser?.name || "-"
+                                    }
+                                    disabled
+                                    readOnly
+                                />
+                            </div>
+
+                            <div className="settings-form-group">
+                                <label>Email</label>
+
+                                <input
+                                    type="email"
+                                    value={
+                                        storedUser?.email || "-"
+                                    }
+                                    disabled
+                                    readOnly
+                                />
+                            </div>
+
+                            <div className="settings-form-group">
+                                <label>Role</label>
+
+                                <input
+                                    type="text"
+                                    value={
+                                        storedUser?.role || "-"
+                                    }
+                                    disabled
+                                    readOnly
+                                />
+                            </div>
+
+                        </div>
+                    ) : (
+
+                        /* =========================
+                           PROFILE EDIT FORM
+                        ========================= */
+
+                        <form
+                            className="settings-form"
+                            onSubmit={handleUpdateProfile}
+                        >
+
+                            <div className="settings-form-group">
+
+                                <label htmlFor="name">
+                                    Name
+                                </label>
+
+                                <input
+                                    id="name"
+                                    type="text"
+                                    value={name}
+                                    onChange={(e) =>
+                                        setName(
+                                            e.target.value
+                                        )
+                                    }
+                                    placeholder="Enter your name"
+                                    required
+                                />
+
+                            </div>
+
+                            <div className="settings-form-group">
+
+                                <label htmlFor="email">
+                                    Email
+                                </label>
+
+                                <input
+                                    id="email"
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) =>
+                                        setEmail(
+                                            e.target.value
+                                        )
+                                    }
+                                    placeholder="Enter your email"
+                                    required
+                                />
+
+                            </div>
+
+                            <div className="settings-actions">
+
+                                <button
+                                    type="submit"
+                                    className="settings-save-button"
+                                    disabled={
+                                        profileLoading
+                                    }
+                                >
+                                    {profileLoading
+                                        ? "Saving..."
+                                        : "Save Changes"}
+                                </button>
+
+                                <button
+                                    type="button"
+                                    className="settings-cancel-button"
+                                    onClick={
+                                        handleCancelEdit
+                                    }
+                                    disabled={
+                                        profileLoading
+                                    }
+                                >
+                                    Cancel
+                                </button>
+
+                            </div>
+
+                        </form>
+                    )}
+
+                    {/* =========================
+                        MESSAGES
+                    ========================= */}
+
+                    {message && (
+                        <div className="settings-message">
+                            {message}
+                        </div>
+                    )}
+
+                    {error && (
+                        <div className="settings-error">
+                            {error}
+                        </div>
+                    )}
+
+                    {/* =========================
+                        DIVIDER
+                    ========================= */}
+
+                    <hr className="settings-divider" />
+
+                    {/* =========================
+                        CHANGE PASSWORD
+                    ========================= */}
+
+                    <div className="settings-card-header">
+
+                        <div>
+                            <h2>
+                                Change Password
+                            </h2>
+
+                            <p>
+                                Keep your account secure with a strong password.
+                            </p>
+                        </div>
+
+                    </div>
 
                     <form
-                        onSubmit={
-                            handleUpdateProfile
-                        }
-                        style={{
-                            marginTop: "20px",
-                        }}
+                        className="settings-form"
+                        onSubmit={handleChangePassword}
                     >
 
-                        <label>
-                            Name
-                        </label>
+                        {/* CURRENT PASSWORD */}
 
-                        <input
-                            type="text"
-                            value={name}
-                            onChange={(e) =>
-                                setName(
-                                    e.target.value
-                                )
-                            }
-                            required
-                            style={{
-                                width: "100%",
-                                padding: "12px",
-                                marginTop:
-                                    "6px",
-                                marginBottom:
-                                    "15px",
-                                boxSizing:
-                                    "border-box",
-                                border:
-                                    "1px solid #cbd5e1",
-                                borderRadius:
-                                    "8px",
-                            }}
-                        />
+                        <div className="settings-form-group">
 
-                        <label>
-                            Email
-                        </label>
+                            <label htmlFor="currentPassword">
+                                Current Password
+                            </label>
 
-                        <input
-                            type="email"
-                            value={email}
-                            onChange={(e) =>
-                                setEmail(
-                                    e.target.value
-                                )
-                            }
-                            required
-                            style={{
-                                width: "100%",
-                                padding: "12px",
-                                marginTop:
-                                    "6px",
-                                marginBottom:
-                                    "20px",
-                                boxSizing:
-                                    "border-box",
-                                border:
-                                    "1px solid #cbd5e1",
-                                borderRadius:
-                                    "8px",
-                            }}
-                        />
+                            <input
+                                id="currentPassword"
+                                type="password"
+                                value={
+                                    currentPassword
+                                }
+                                onChange={(e) =>
+                                    setCurrentPassword(
+                                        e.target.value
+                                    )
+                                }
+                                placeholder="Enter current password"
+                                required
+                            />
 
-                        <div
-                            style={{
-                                display: "flex",
-                                gap: "10px",
-                            }}
-                        >
+                        </div>
+
+                        {/* NEW PASSWORD */}
+
+                        <div className="settings-form-group">
+
+                            <label htmlFor="newPassword">
+                                New Password
+                            </label>
+
+                            <input
+                                id="newPassword"
+                                type="password"
+                                value={newPassword}
+                                onChange={(e) =>
+                                    setNewPassword(
+                                        e.target.value
+                                    )
+                                }
+                                placeholder="Enter new password"
+                                minLength={6}
+                                required
+                            />
+
+                        </div>
+
+                        {/* CONFIRM PASSWORD */}
+
+                        <div className="settings-form-group">
+
+                            <label htmlFor="confirmPassword">
+                                Confirm New Password
+                            </label>
+
+                            <input
+                                id="confirmPassword"
+                                type="password"
+                                value={
+                                    confirmPassword
+                                }
+                                onChange={(e) =>
+                                    setConfirmPassword(
+                                        e.target.value
+                                    )
+                                }
+                                placeholder="Confirm new password"
+                                minLength={6}
+                                required
+                            />
+
+                        </div>
+
+                        {/* PASSWORD BUTTON */}
+
+                        <div className="settings-actions">
 
                             <button
                                 type="submit"
+                                className="settings-save-button"
                                 disabled={
-                                    profileLoading
+                                    passwordLoading
                                 }
-                                style={{
-                                    padding:
-                                        "11px 18px",
-                                    border: "none",
-                                    borderRadius:
-                                        "8px",
-                                    background:
-                                        "#2563eb",
-                                    color:
-                                        "white",
-                                    cursor:
-                                        profileLoading
-                                            ? "not-allowed"
-                                            : "pointer",
-                                    fontWeight:
-                                        "600",
-                                }}
                             >
-                                {profileLoading
-                                    ? "Saving..."
-                                    : "Save Changes"}
-                            </button>
-
-                            <button
-                                type="button"
-                                onClick={
-                                    handleCancelEdit
-                                }
-                                disabled={
-                                    profileLoading
-                                }
-                                style={{
-                                    padding:
-                                        "11px 18px",
-                                    border:
-                                        "1px solid #cbd5e1",
-                                    borderRadius:
-                                        "8px",
-                                    background:
-                                        "white",
-                                    cursor:
-                                        "pointer",
-                                    fontWeight:
-                                        "600",
-                                }}
-                            >
-                                Cancel
+                                {passwordLoading
+                                    ? "Changing..."
+                                    : "Change Password"}
                             </button>
 
                         </div>
 
                     </form>
-                )}
 
-                {/* MESSAGE */}
-
-                {message && (
-                    <div
-                        style={{
-                            marginTop: "15px",
-                            padding: "10px",
-                            background:
-                                "#dcfce7",
-                            color:
-                                "#166534",
-                            borderRadius:
-                                "8px",
-                        }}
-                    >
-                        {message}
-                    </div>
-                )}
-
-                {error && (
-                    <div
-                        style={{
-                            marginTop: "15px",
-                            padding: "10px",
-                            background:
-                                "#fee2e2",
-                            color:
-                                "#b91c1c",
-                            borderRadius:
-                                "8px",
-                        }}
-                    >
-                        {error}
-                    </div>
-                )}
-
-                <hr
-                    style={{
-                        margin: "25px 0",
-                        border: "none",
-                        borderTop:
-                            "1px solid #e2e8f0",
-                    }}
-                />
-
-                {/* =========================
-                    CHANGE PASSWORD
-                ========================= */}
-
-                <h2>
-                    Change Password
-                </h2>
-
-                <form
-                    onSubmit={
-                        handleChangePassword
-                    }
-                    style={{
-                        marginTop: "20px",
-                    }}
-                >
-
-                    <label>
-                        Current Password
-                    </label>
-
-                    <input
-                        type="password"
-                        value={
-                            currentPassword
-                        }
-                        onChange={(e) =>
-                            setCurrentPassword(
-                                e.target.value
-                            )
-                        }
-                        required
-                        style={{
-                            width: "100%",
-                            padding: "12px",
-                            marginTop: "6px",
-                            marginBottom:
-                                "15px",
-                            boxSizing:
-                                "border-box",
-                            border:
-                                "1px solid #cbd5e1",
-                            borderRadius:
-                                "8px",
-                        }}
-                    />
-
-                    <label>
-                        New Password
-                    </label>
-
-                    <input
-                        type="password"
-                        value={
-                            newPassword
-                        }
-                        onChange={(e) =>
-                            setNewPassword(
-                                e.target.value
-                            )
-                        }
-                        required
-                        minLength={6}
-                        style={{
-                            width: "100%",
-                            padding: "12px",
-                            marginTop: "6px",
-                            marginBottom:
-                                "15px",
-                            boxSizing:
-                                "border-box",
-                            border:
-                                "1px solid #cbd5e1",
-                            borderRadius:
-                                "8px",
-                        }}
-                    />
-
-                    <label>
-                        Confirm New Password
-                    </label>
-
-                    <input
-                        type="password"
-                        value={
-                            confirmPassword
-                        }
-                        onChange={(e) =>
-                            setConfirmPassword(
-                                e.target.value
-                            )
-                        }
-                        required
-                        minLength={6}
-                        style={{
-                            width: "100%",
-                            padding: "12px",
-                            marginTop: "6px",
-                            marginBottom:
-                                "20px",
-                            boxSizing:
-                                "border-box",
-                            border:
-                                "1px solid #cbd5e1",
-                            borderRadius:
-                                "8px",
-                        }}
-                    />
-
-                    <button
-                        type="submit"
-                        disabled={
-                            passwordLoading
-                        }
-                        style={{
-                            padding:
-                                "12px 20px",
-                            border: "none",
-                            borderRadius:
-                                "8px",
-                            background:
-                                "#2563eb",
-                            color: "white",
-                            cursor:
-                                passwordLoading
-                                    ? "not-allowed"
-                                    : "pointer",
-                            fontWeight:
-                                "600",
-                        }}
-                    >
-                        {passwordLoading
-                            ? "Changing..."
-                            : "Change Password"}
-                    </button>
-
-                </form>
+                </div>
 
             </div>
+
         </div>
     );
 }
